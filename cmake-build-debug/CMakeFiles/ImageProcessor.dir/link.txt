@@ -1,0 +1,3 @@
+"C:\Program Files\JetBrains\CLion 2020.3.2\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\ImageProcessor.dir/objects.a
+C:\mingw64\bin\ar.exe cr CMakeFiles\ImageProcessor.dir/objects.a @CMakeFiles\ImageProcessor.dir\objects1.rsp
+C:\mingw64\bin\g++.exe -g   -Wl,--whole-archive CMakeFiles\ImageProcessor.dir/objects.a -Wl,--no-whole-archive  -o ImageProcessor.exe -Wl,--out-implib,libImageProcessor.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\ImageProcessor.dir\linklibs.rsp
