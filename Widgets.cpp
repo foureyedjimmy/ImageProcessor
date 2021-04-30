@@ -108,3 +108,47 @@ Button::Button(sf::Vector2f size, sf::Vector2f position, bool togglable, const s
     button.setOutlineThickness(1);
     highlightColor = sf::Color(255,255,255);
 }
+
+Entry::Entry(sf::Vector2f size, sf::Vector2f position) : Widgets(size, position) {
+    sf::Vector2f entrySize(size.x - 5, size.y - 5);
+    entryField.setSize(entrySize);
+    entryField.setPosition(position.x + 2.5, position.y + 2.5);
+    entryField.setFillColor(sf::Color::White);
+    entryField.setOutlineColor(sf::Color::Black);
+    entryField.setOutlineThickness(1);
+    title.setFillColor(sf::Color::Black);
+    float charSize = size.y/1.5;
+    title.setCharacterSize(charSize);
+    title.setOrigin(size.x/2.1, 0);
+    title.setPosition(position.x + size.x/2, position.y);
+
+}
+
+void Entry::draw(sf::RenderWindow &window) {
+    window.draw(entryField);
+    window.draw(title);
+}
+
+void Entry::select() {
+    entryField.setOutlineThickness(5);
+    typedTo = true;
+}
+
+void Entry::deselect() {
+    entryField.setOutlineThickness(1);
+    typedTo = false;
+}
+
+bool Entry::typedToo(){
+    return typedTo;
+}
+
+void Entry::setEntry(std::string& text){
+    entry += text;
+    title.setString(entry);
+    std::cout << entry << std::endl;
+
+}
+std::string Entry::getEntry() {
+    return entry;
+}

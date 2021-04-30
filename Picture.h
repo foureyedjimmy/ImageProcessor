@@ -30,6 +30,7 @@ public:
     void manip(std::string& manipType);
 
     sf::Image createImage();
+    sf::Image createOrigImage();
 
     void load(std::string& fileName);
 

@@ -20,7 +20,7 @@ public:
 
     void addSlider(sf::Vector2f range, sf::Vector2u size, sf::Vector2u pos);
 
-    void addEntry(sf::Vector2u size, sf::Vector2u pos);
+    void addEntry(sf::Vector2f size, sf::Vector2f pos);
 
     void draw(sf::RenderWindow& window);
 
@@ -28,11 +28,20 @@ public:
 
     void setFont(sf::Font& font);
 
+    void addImage(sf::Image& pic);
+
+    Entry& getEntry();
+
+    void checkEntries(sf::Vector2i& mousePos);
+
+
+
 private:
     std::vector<Button> buttons;
     std::vector<Slider> sliders;
     std::vector<Entry> entries;
     sf::Font font;
+    sf::Vector2f pos;
     sf::RectangleShape outsideBox, insideBox;
     float boarderWidth;
     sf::Color backgroundColor, foregroundColor;

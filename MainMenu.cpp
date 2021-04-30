@@ -14,13 +14,15 @@ MainMenu::MainMenu(RenderWindow& window) {
    updateWinSize(window);
    scaleFactor = 1;
    const int SIZE = 3;
-   std::string buttonNames[3] = {"Gaussian Blur", "Equalize",  "Grey Scale"};
-   Panel panel({100, 900}, {0, 0});
+   std::string buttonNames[3] = {"Gaussian Blur", "Equalize",  "Grey Scale", };
+   Panel panel({100, 900}, {0, float(windowSize.y - 900)/2});
    for(int i = 0; i < SIZE; i++) {
        float y = 10 + i * 25;
        panel.addButton(buttonNames[i], {90, 20}, {5 , y}, true);
    }
+   panel.addEntry({90, 20}, {5, 100});
    panels.push_back(panel);
+
 }
 
 void MainMenu::loadFont(sf::Font &font) {
@@ -61,8 +63,9 @@ void MainMenu::loop(RenderWindow& window) {
                     mousePos = {mousePos.x - window.getPosition().x, mousePos.y - window.getPosition().y - 25};
                     for(Panel& panel:panels){
                         std::string action;
+                        panel.checkEntries(mousePos);
                         action = panel.checkButtons(mousePos);
-                        if(action != ""){
+                        if(action != "") {
                             startManip(action);
                         }
                     }
@@ -70,9 +73,19 @@ void MainMenu::loop(RenderWindow& window) {
             }else if(event.type == Event::Resized){
                 updateWinSize(window);
                 std::cout << windowSize.x << ' ' << windowSize.y << std::endl;
+            }else if(event.type == Event::TextEntered){
+                Entry tempEntry({0,0}, {0,0});
+                for(Panel& panel:panels){
+                   tempEntry = panel.getEntry();
+                   std::string enter;
+                   enter = tempEntry.getEntry();
+                   enter += event.text.unicode;
+                   tempEntry.setEntry(enter);
+                }
             }
         }
         window.draw(mainImage);
+        window.draw(origImage);
         for(Panel& panel:panels){
             panel.draw(window);
         }
@@ -86,7 +99,7 @@ void MainMenu::createPhoto(std::string) {
 }
 
 void MainMenu::startManip(std::string& manip) {
-    if(manip = =)
+    picture.manip(manip);
 
 }
 
@@ -97,8 +110,14 @@ void MainMenu::setFrameRate(int framerate) {
 void MainMenu::showPic() {
     texture.loadFromImage(picture.createImage());
     mainImage.setTexture(texture);
+    scaleFactor = float(windowSize.x)/ (2 * windowSize.x);
+    std::cout << scaleFactor << std::endl;
     mainImage.setScale(scaleFactor, scaleFactor);
-    mainImage.setPosition(0,0);
+    mainImage.setPosition(windowSize.x/10, windowSize.y/4);
+    textureOrig.loadFromImage(picture.createOrigImage());
+    origImage.setTexture(textureOrig);
+    origImage.setScale(scaleFactor, scaleFactor);
+    origImage.setPosition(windowSize.x/1.8, windowSize.y/4);
 }
 
 void MainMenu::loadPic(std::string filename) {

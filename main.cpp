@@ -3,7 +3,7 @@
 #include "MainMenu.h"
 using namespace sf;
 int main() {
-    RenderWindow window(VideoMode(720, 500), "Image thing", Style::Close | Style::Titlebar);
+    RenderWindow window(VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Image thing", Style::Close | Style::Titlebar);
     MainMenu menu(window);
     sf::Font font;
     font.loadFromFile("..\\arial.ttf");

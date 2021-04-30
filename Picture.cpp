@@ -72,6 +72,18 @@ void Picture::manip(std::string &manipType) {
     }
 }
 
+sf::Image Picture::createOrigImage() {
+    sf::Image image;
+    image.create(origPixArr[0].size(), origPixArr.size(), sf::Color(0,0,0, 0));
+    for(unsigned int i = 0; i < origPixArr.size(); i++) {
+        for (unsigned int j = 0; j < origPixArr[0].size(); j++) {
+            image.setPixel(j, i, origPixArr[i][j].toColor());
+        }
+    }
+    return image;
+}
+
+
 void Picture::load(std::string &fileName) {
     sf::Image tempImage;
     if(!tempImage.loadFromFile(fileName)){

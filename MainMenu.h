@@ -28,6 +28,8 @@ public:
 
     void startManip(std::string& manip);
 
+
+
     void setFrameRate(int framerate);
 
 
@@ -37,13 +39,14 @@ private:
     sf::Vector2u windowSize;
     sf::Keyboard keys;
     sf::Mouse mouse;
+
     sf::Event event;
     sf::Vector2i pos, mousePos, relPos;
     sf::Font font;
     Picture picture;
     float scaleFactor;
-    sf::Texture texture;
-    sf::Sprite mainImage;
+    sf::Texture texture, textureOrig;
+    sf::Sprite mainImage, origImage;
     void create(sf::RenderWindow &window);
     std::vector<Panel> panels;
 

@@ -71,19 +71,30 @@ private:
     sf::Vector2f sliderPos, range;
 };
 
-class Entry : Widgets{
+class Entry : public Widgets{
 
 public:
-    Entry(sf::Vector2u size, sf::Vector2u position);
+    Entry(sf::Vector2f size, sf::Vector2f position);
 
     void draw(sf::RenderWindow& window);
 
     std::string getEntry();
 
+    void setEntry(std::string& text);
+    bool typedToo();
+    void select();
+    void deselect();
+
 private:
     sf::RectangleShape entryField, entrySelectionInd;
     sf::Text entryText;
     std::string entry;
+    bool typedTo;
+};
+
+class Label : public Widgets{
+public:
+    Label(std::string& text, sf::Vector2f size, sf::Vector2f pos);
 
 };
 
