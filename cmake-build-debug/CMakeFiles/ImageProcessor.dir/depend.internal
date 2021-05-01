@@ -84,6 +84,7 @@ CMakeFiles/ImageProcessor.dir/MainMenu.cpp.obj
 CMakeFiles/ImageProcessor.dir/Panel.cpp.obj
  C:/Users/jimmy/CLionProjects/ImageProcessor/Panel.cpp
  C:/Users/jimmy/CLionProjects/ImageProcessor/Panel.h
+ C:/Users/jimmy/CLionProjects/ImageProcessor/Picture.h
  C:/Users/jimmy/CLionProjects/ImageProcessor/Widgets.h
  C:/mingw64/include/SFML/Config.hpp
  C:/mingw64/include/SFML/Graphics.hpp

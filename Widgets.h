@@ -80,8 +80,9 @@ public:
 
     std::string getEntry();
 
-    void setEntry(std::string& text);
-    bool typedToo();
+    void clearEntry();
+    void setEntry(char letter);
+    bool typedToo() const;
     void select();
     void deselect();
 
@@ -95,6 +96,7 @@ private:
 class Label : public Widgets{
 public:
     Label(std::string& text, sf::Vector2f size, sf::Vector2f pos);
+    void draw(sf::RenderWindow& window);
 
 };
 

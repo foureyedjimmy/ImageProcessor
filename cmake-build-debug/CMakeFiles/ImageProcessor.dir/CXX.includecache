@@ -6,27 +6,19 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/jimmy/CLionProjects/ImageProcessor/Panel.cpp
-Panel.h
-C:/Users/jimmy/CLionProjects/ImageProcessor/Panel.h
-Widgets.h
-C:/Users/jimmy/CLionProjects/ImageProcessor/Widgets.h
-
-C:/Users/jimmy/CLionProjects/ImageProcessor/Panel.h
-SFML/Graphics.hpp
+C:/Users/jimmy/CLionProjects/ImageProcessor/Picture.cpp
+Picture.h
+C:/Users/jimmy/CLionProjects/ImageProcessor/Picture.h
+cctype
 -
+
+C:/Users/jimmy/CLionProjects/ImageProcessor/Picture.h
 iostream
 -
-Widgets.h
-C:/Users/jimmy/CLionProjects/ImageProcessor/Widgets.h
-
-C:/Users/jimmy/CLionProjects/ImageProcessor/Widgets.cpp
-Widgets.h
-C:/Users/jimmy/CLionProjects/ImageProcessor/Widgets.h
-iostream
+vector
 -
-
-C:/Users/jimmy/CLionProjects/ImageProcessor/Widgets.h
+ctime
+-
 SFML/Graphics.hpp
 -
 

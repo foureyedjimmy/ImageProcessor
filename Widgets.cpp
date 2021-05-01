@@ -8,7 +8,11 @@
 Widgets::Widgets(sf::Vector2f size, sf::Vector2f position) {
     this -> size = size;
     this -> position = position;
-    backgroundColor = sf::Color(200,200,200);
+    title.setPosition(position);
+    float charSize = size.y/1.5;
+    title.setCharacterSize(charSize);
+    title.setOrigin(size.x/2.1, 0);
+    title.setFillColor(sf::Color::Black);
 }
 
 void Widgets::setFont(sf::Font& font) {
@@ -94,9 +98,6 @@ void Button::draw(sf::RenderWindow &window) {
 Button::Button(sf::Vector2f size, sf::Vector2f position, bool togglable, const std::string &LABEL) : Widgets(size, position) {
     title.setString(sf::String(LABEL));
     title.setFillColor(sf::Color::Black);
-    float charSize = size.y/1.5;
-    title.setCharacterSize(charSize);
-    title.setOrigin(size.x/2.1, 0);
     title.setPosition(position.x + size.x/2, position.y);
     toggle = togglable;
     hasPicture = false;
@@ -116,10 +117,6 @@ Entry::Entry(sf::Vector2f size, sf::Vector2f position) : Widgets(size, position)
     entryField.setFillColor(sf::Color::White);
     entryField.setOutlineColor(sf::Color::Black);
     entryField.setOutlineThickness(1);
-    title.setFillColor(sf::Color::Black);
-    float charSize = size.y/1.5;
-    title.setCharacterSize(charSize);
-    title.setOrigin(size.x/2.1, 0);
     title.setPosition(position.x + size.x/2, position.y);
 
 }
@@ -139,16 +136,36 @@ void Entry::deselect() {
     typedTo = false;
 }
 
-bool Entry::typedToo(){
+bool Entry::typedToo() const{
     return typedTo;
 }
 
-void Entry::setEntry(std::string& text){
-    entry += text;
+
+void Entry::clearEntry() {
+    entry = "";
     title.setString(entry);
-    std::cout << entry << std::endl;
+}
+
+void Entry::setEntry(char text){
+    if(text==8) {
+        entry.pop_back();
+    }else{
+        entry += text;
+    }
+    title.setString(entry);
 
 }
 std::string Entry::getEntry() {
     return entry;
+}
+
+
+Label::Label(std::string &text, sf::Vector2f size, sf::Vector2f pos) : Widgets(size, pos){
+    float charSize = size.y/1.5;
+    title.setCharacterSize(charSize);
+    title.setString(text);
+}
+
+void Label::draw(sf::RenderWindow& window){
+    window.draw(title);
 }

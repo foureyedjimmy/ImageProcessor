@@ -20,8 +20,8 @@ sf::Color Pixel::toColor() const{
 }
 
 Picture::Picture() {
-    typeArr = {"invert", "grey", "flip", "outline", "rotate", "saturate",
-                "contrast", "rgb", "gausblur", "smooth outline", "equalize", "mirror"};
+    typeArr = {"Gaussian Blur", "Equalize", "Grey Scale", "Mirror", "Flip", "Rotate 90 deg",
+               "Histogram", "RGB Histogram", "Invert Colors", "Contrast", "Saturate", "Outline"};
 
 }
 
@@ -33,8 +33,8 @@ Picture::Picture(std::string& fileName) {
     size = tempImage.getSize();
     loadPixArr(tempImage);
 
-    typeArr = {"invert", "grey", "flip", "outline", "rotate", "saturate",
-               "contrast", "rgb", "gausblur", "smooth outline", "equalize", "mirror"};
+    typeArr = {"Gaussian Blur", "Equalize", "Grey Scale", "Mirror", "Flip", "Rotate 90 deg",
+               "Histogram", "RGB Histogram", "Invert Colors", "Contrast", "Saturate", "Outline"};
 }
 
 
@@ -49,8 +49,7 @@ bool Picture::in(std::string& str){
 }
 
 void Picture::loadPixArr(sf::Image& image){
-    sf::Vector2u size = image.getSize();
-    std::cout << size.x << ' ' << size.y << std::endl;
+    size = image.getSize();
     for(int i = 0; i < size.y; i++){
         std::vector<Pixel> tempArr(size.x);
         for(int j = 0; j < size.x; j++){
@@ -96,46 +95,76 @@ void Picture::load(std::string &fileName) {
 
 void Picture::interpret(int value) {
     switch(value){
+        case 0:
+            GaussianBlur();
+            break;
         case 1:
-            createInvert();
+            createHistogramEqualization();
+            break;
         case 2:
             createGrey();
+            break;
         case 3:
-            createFlip();
+            createMirror();
+            break;
         case 4:
-            createOutLine();
+            createFlip();
+            break;
         case 5:
             createRotated();
+            break;
         case 6:
-            createSaturated();
+            createHistogram();
+            break;
         case 7:
-            createContrast();
+            createRGBHistogram();
+            break;
         case 8:
-            createRGB();
+            createInvert();
+            break;
         case 9:
-            GaussianBlur();
+            createContrast();
+            break;
         case 10:
-            createSmoothOutline();
+            createSaturated();
+            break;
         case 11:
-            createHistogramEqualization();
-        case 12:
-            createMirror();
+            createOutLine();
+            break;
         default:
             std::cerr << "not viable method" << std::endl;
     }
 }
 
+uint8_t Picture::getPixAverage(const Pixel& PIXEL){
+    return (PIXEL.r + PIXEL.g + PIXEL.b)/3;
+}
+
 void Picture::createInvert() {
-
-
+    for(std::vector<Pixel>& tempArr : pixArr){
+        for(Pixel& pixel : tempArr) {
+            pixel = {sf::Uint8 (255 - pixel.r), sf::Uint8(255 - pixel.g), sf::Uint8 (255 - pixel.b)};
+        }
+    }
 }
 
 void Picture::createGrey() {
-
+    for(std::vector<Pixel>& tempArr : pixArr){
+        for(Pixel& pixel : tempArr){
+            uint8_t average = getPixAverage(pixel);
+            pixel = {average, average, average};
+        }
+    }
 }
 
 void Picture::createFlip() {
-
+    std::vector<std::vector<Pixel>> tempArr = pixArr;
+    for(int i = pixArr.size() - 1; i >= 0; i --){
+        int k = pixArr.size() - i - 1;
+        for(int j = 0; j < pixArr[0].size(); j++){
+            pixArr[i][j] = tempArr[k][j];
+        }
+    }
 }
 
 void Picture::createOutLine() {
@@ -143,7 +172,13 @@ void Picture::createOutLine() {
 }
 
 void Picture::createRotated() {
-
+    std::vector<std::vector<Pixel>> tempArr = pixArr;
+    for(int i = pixArr.size() - 1; i >= 0; i --){
+        int k = pixArr.size() - i - 1;
+        for(int j = pixArr[0].size(); j >= 0; j--){
+            pixArr[i][j] = tempArr[k][j];
+        }
+    }
 }
 
 void Picture::createSaturated() {
@@ -154,15 +189,8 @@ void Picture::createContrast() {
 
 }
 
-void Picture::createRGB() {
-
-}
 
 void Picture::GaussianBlur() {
-
-}
-
-void Picture::createSmoothOutline() {
 
 }
 
@@ -196,3 +224,4 @@ sf::Image Picture::createImage(){
 sf::Vector2u Picture::getSize() {
     return size;
 }
+

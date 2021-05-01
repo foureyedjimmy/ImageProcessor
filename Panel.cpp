@@ -18,8 +18,12 @@ Panel::Panel(sf::Vector2f size, sf::Vector2f location) {
     outsideBox.setOutlineColor(foregroundColor);
 }
 
+std::string Panel::getEnteredData() {
+    return lastEntry;
+}
+
 void Panel::addButton(std::string& name, sf::Vector2f size, sf::Vector2f pos, bool toggle) {
-    Button buttonNew(size, {pos.x, pos.y + this -> pos.y}, toggle, name);
+    Button buttonNew(size, {pos.x + this -> pos.x, pos.y + this -> pos.y}, toggle, name);
     buttonNew.setFont(font);
     buttons.push_back(buttonNew);
 }
@@ -54,46 +58,74 @@ void Panel::addEntry(sf::Vector2f size, sf::Vector2f position) {
     entries.push_back(entry);
 }
 
-void Panel::checkEntries(sf::Vector2i& mousePos){
+void Panel::setVisible(bool vis){
+    visible = vis;
+}
+
+bool Panel::isVisible() const {
+    return visible;
+}
+
+bool Panel::checkEntries(sf::Vector2i& mousePos){
     sf::Vector2f floatPos(mousePos.x, mousePos.y);
     for(Entry& entry : entries){
         if(entry.inBounds(floatPos)){
-
             entry.select();
+            return true;
         }else{
             entry.deselect();
         }
     }
+    return false;
 }
 
-//void Panel::getActiveEntry(){
-//    for()
-//}
-
-void Panel::draw(sf::RenderWindow &window) {
-    window.draw(outsideBox);
-//    buttons[0].draw(window);
-    for(Button& button : buttons){
-        button.draw(window);
-    }
-//    for(Slider slider: sliders){
-//        slider.draw(window);
-//    }
-    for(Entry entry : entries){
-        entry.draw(window);
-    }
-
-}
-
-Entry& Panel::getEntry() {
-    for(Entry& entry: entries){
+bool Panel::getActiveEntry(char letter){
+    for(Entry& entry : entries){
         if(entry.typedToo()){
-            return entry;
+            if(letter == 13){
+                entry.clearEntry();
+            }else {
+                entry.setEntry(letter);
+                lastEntry = entry.getEntry();
+            }
+            return true;
         }
     }
-    return entries[0];
+    return false;
 }
 
-void Panel::resize(float x, float y) {
+void Panel::setName(const std::string& NEW_NAME){
+    name = NEW_NAME;
+}
 
+std::string Panel::getName() const{
+    return name;
+}
+
+sf::Vector2f Panel::getPos() {
+    return pos;
+}
+
+void Panel::draw(sf::RenderWindow &window) {
+    if(visible) {
+        window.draw(outsideBox);
+        for (Button &button : buttons) {
+            button.draw(window);
+        }
+        for (Entry entry : entries) {
+            entry.draw(window);
+        }
+//        for (Label &label : labels){
+//            label.draw(window);
+//        }
+    }
+
+}
+
+
+void Panel::addLabel(std::string name, sf::Vector2f pos, sf::Vector2f size)
+{
+    Label label(name, this -> pos + pos, size);
+    label.setFont(font);
+    labels.push_back(label);
 }

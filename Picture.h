@@ -30,6 +30,7 @@ public:
     void manip(std::string& manipType);
 
     sf::Image createImage();
+
     sf::Image createOrigImage();
 
     void load(std::string& fileName);
@@ -42,7 +43,7 @@ private:
 
     std::vector<std::string> methods, typeArr;
 
-    int indexInType{};
+    int indexInType;
 
     sf::Vector2u size;
 
@@ -53,6 +54,8 @@ private:
     void createGrey();
 
     void createFlip();
+
+    static uint8_t getPixAverage(const Pixel& PIXEL);
 
     void createOutLine();
 

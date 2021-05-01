@@ -83,6 +83,7 @@ CMakeFiles/ImageProcessor.dir/MainMenu.cpp.obj: C:/mingw64/include/SFML/Window/W
 
 CMakeFiles/ImageProcessor.dir/Panel.cpp.obj: ../Panel.cpp
 CMakeFiles/ImageProcessor.dir/Panel.cpp.obj: ../Panel.h
+CMakeFiles/ImageProcessor.dir/Panel.cpp.obj: ../Picture.h
 CMakeFiles/ImageProcessor.dir/Panel.cpp.obj: ../Widgets.h
 CMakeFiles/ImageProcessor.dir/Panel.cpp.obj: C:/mingw64/include/SFML/Config.hpp
 CMakeFiles/ImageProcessor.dir/Panel.cpp.obj: C:/mingw64/include/SFML/Graphics.hpp

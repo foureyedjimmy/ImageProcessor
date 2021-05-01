@@ -12,17 +12,38 @@ MainMenu::MainMenu() {
 
 MainMenu::MainMenu(RenderWindow& window) {
    updateWinSize(window);
-   scaleFactor = 1;
-   const int SIZE = 3;
-   std::string buttonNames[3] = {"Gaussian Blur", "Equalize",  "Grey Scale", };
-   Panel panel({100, 900}, {0, float(windowSize.y - 900)/2});
-   for(int i = 0; i < SIZE; i++) {
-       float y = 10 + i * 25;
-       panel.addButton(buttonNames[i], {90, 20}, {5 , y}, true);
+   // create Top Bar
+   Panel top_panel({1000, 105}, {float(windowSize.x)/2 - 500,0});
+   const int TOP_SIZE = 3;
+   std::string top_buttons[TOP_SIZE] = {"Undo", "Open", "Save"};
+   for(int i = 0; i < TOP_SIZE; i++) {
+       float y = 10  + i * 30;
+       top_panel.addButton(top_buttons[i], {100, 25}, {10, y}, true);
+       top_panel.setVisible(true);
    }
-   panel.addEntry({90, 20}, {5, 100});
-   panels.push_back(panel);
+    panels.push_back(top_panel);
 
+   //create first variable panel
+   Panel var1({200, 105}, {top_panel.getPos().x + float(windowSize.y)/4 - 100, 0});
+   var1.addLabel("Enter first variable", {100, 30}, {50, 10});
+   var1.addEntry({100,20}, {50, 50});
+   var1.setName("var1");
+   var1.setVisible(true);
+   panels.push_back(var1);
+
+   // create manip panel
+   const int SIZE = 12;
+   std::string manip_types[SIZE] = {"Gaussian Blur", "Equalize", "Grey Scale", "Mirror", "Flip", "Rotate 90 deg",
+                                    "Histogram", "RGB Histogram", "Invert Colors", "Contrast", "Saturate", "Outline"};
+   Panel manip_panel({150, 900}, {0, float(windowSize.y - 900)/2});
+   for(int i = 0; i < SIZE; i++) {
+       float y = 10 + i * 40;
+       manip_panel.addButton(manip_types[i], {140, 30}, {5 , y}, true);
+   }
+   manip_panel.setVisible(true);
+   manip_panel.setName("manip_panel");
+   manip_panel.addEntry({90, 20}, {5, 800});
+   panels.push_back(manip_panel);
 }
 
 void MainMenu::loadFont(sf::Font &font) {
@@ -66,7 +87,7 @@ void MainMenu::loop(RenderWindow& window) {
                         panel.checkEntries(mousePos);
                         action = panel.checkButtons(mousePos);
                         if(action != "") {
-                            startManip(action);
+                            doAction(action);
                         }
                     }
                 }
@@ -74,13 +95,17 @@ void MainMenu::loop(RenderWindow& window) {
                 updateWinSize(window);
                 std::cout << windowSize.x << ' ' << windowSize.y << std::endl;
             }else if(event.type == Event::TextEntered){
-                Entry tempEntry({0,0}, {0,0});
+                std::string action;
                 for(Panel& panel:panels){
-                   tempEntry = panel.getEntry();
-                   std::string enter;
-                   enter = tempEntry.getEntry();
-                   enter += event.text.unicode;
-                   tempEntry.setEntry(enter);
+                   if(panel.getActiveEntry(event.text.unicode)){
+                       if(event.text.unicode == 13) {
+                           entryPanel = panel.getName();
+                           data = panel.getEnteredData();
+                           action = "Submit";
+                           doAction(action);
+                       }
+                       break;
+                   }
                 }
             }
         }
@@ -98,20 +123,23 @@ void MainMenu::createPhoto(std::string) {
 
 }
 
-void MainMenu::startManip(std::string& manip) {
-    picture.manip(manip);
+void MainMenu::doAction(std::string& manip) {
+    if(manip == "Submit"){
 
+    }else{
+        picture.manip(manip);
+    }
+    showPic();
 }
 
 void MainMenu::setFrameRate(int framerate) {
-
+    framerate = framerate;
 }
 
 void MainMenu::showPic() {
     texture.loadFromImage(picture.createImage());
     mainImage.setTexture(texture);
-    scaleFactor = float(windowSize.x)/ (2 * windowSize.x);
-    std::cout << scaleFactor << std::endl;
+    scaleFactor = 810.0/picture.getSize().x;
     mainImage.setScale(scaleFactor, scaleFactor);
     mainImage.setPosition(windowSize.x/10, windowSize.y/4);
     textureOrig.loadFromImage(picture.createOrigImage());

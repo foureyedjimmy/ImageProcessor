@@ -26,9 +26,7 @@ public:
 
     void createPhoto(std::string);
 
-    void startManip(std::string& manip);
-
-
+    void doAction(std::string& manip);
 
     void setFrameRate(int framerate);
 
@@ -39,16 +37,16 @@ private:
     sf::Vector2u windowSize;
     sf::Keyboard keys;
     sf::Mouse mouse;
-
+    std::string entryPanel;
     sf::Event event;
     sf::Vector2i pos, mousePos, relPos;
     sf::Font font;
     Picture picture;
-    float scaleFactor;
+    float scaleFactor, variable1, variable2;
     sf::Texture texture, textureOrig;
     sf::Sprite mainImage, origImage;
-    void create(sf::RenderWindow &window);
     std::vector<Panel> panels;
+    std::string data;
 
     void updateWinSize(sf::RenderWindow &window);
 };

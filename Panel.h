@@ -16,8 +16,6 @@ public:
 
     void addButton(std::string& name, sf::Vector2f size, sf::Vector2f pos, bool toggle);
 
-    void resize(float x, float y);
-
     void addSlider(sf::Vector2f range, sf::Vector2u size, sf::Vector2u pos);
 
     void addEntry(sf::Vector2f size, sf::Vector2f pos);
@@ -28,11 +26,23 @@ public:
 
     void setFont(sf::Font& font);
 
-    void addImage(sf::Image& pic);
+    void addLabel(std::string name, sf::Vector2f size, sf::Vector2f pos);
 
-    Entry& getEntry();
+    bool getActiveEntry(char letter);
 
-    void checkEntries(sf::Vector2i& mousePos);
+    std::string getEnteredData();
+
+    bool checkEntries(sf::Vector2i& mousePos);
+
+    sf::Vector2f getPos();
+
+    void setName(const std::string& NEW_NAME);
+
+    std::string getName() const;
+
+    void setVisible(bool vis);
+
+    bool isVisible() const;
 
 
 
@@ -40,11 +50,14 @@ private:
     std::vector<Button> buttons;
     std::vector<Slider> sliders;
     std::vector<Entry> entries;
+    std::vector<Label> labels;
+    bool visible;
     sf::Font font;
     sf::Vector2f pos;
     sf::RectangleShape outsideBox, insideBox;
     float boarderWidth;
     sf::Color backgroundColor, foregroundColor;
+    std::string lastEntry, name;
 };
 
 
