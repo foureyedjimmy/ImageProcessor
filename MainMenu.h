@@ -46,9 +46,18 @@ private:
     sf::Texture texture, textureOrig;
     sf::Sprite mainImage, origImage;
     std::vector<Panel> panels;
-    std::string data;
+    std::string data, lastManip, selectedPanel;
+    bool locked;
+    int req;
 
+    void getVariable(std::string& name);
+
+    void check();
+
+    void updatePicture();
     void updateWinSize(sf::RenderWindow &window);
+
+    void interpretData();
 };
 
 

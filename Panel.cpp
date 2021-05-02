@@ -22,8 +22,8 @@ std::string Panel::getEnteredData() {
     return lastEntry;
 }
 
-void Panel::addButton(std::string& name, sf::Vector2f size, sf::Vector2f pos, bool toggle) {
-    Button buttonNew(size, {pos.x + this -> pos.x, pos.y + this -> pos.y}, toggle, name);
+void Panel::addButton(const std::string& NAME, sf::Vector2f size, sf::Vector2f pos, bool toggle) {
+    Button buttonNew(size, {pos.x + this -> pos.x, pos.y + this -> pos.y}, toggle, NAME);
     buttonNew.setFont(font);
     buttons.push_back(buttonNew);
 }
@@ -45,6 +45,9 @@ void Panel::setFont(sf::Font& font){
     }
     for(Entry& entry: entries){
         entry.setFont(font);
+    }
+    for(Label& label : labels){
+        label.setFont(font);
     }
 }
 
@@ -115,17 +118,16 @@ void Panel::draw(sf::RenderWindow &window) {
         for (Entry entry : entries) {
             entry.draw(window);
         }
-//        for (Label &label : labels){
-//            label.draw(window);
-//        }
+        for (Label &label : labels){
+            label.draw(window);
+        }
     }
 
 }
 
 
-void Panel::addLabel(std::string name, sf::Vector2f pos, sf::Vector2f size)
-{
-    Label label(name, this -> pos + pos, size);
+void Panel::addLabel(std::string name, sf::Vector2f position, sf::Vector2f size){
+    Label label(name, size, {float(pos.x + position.x), float(pos.y + position.y)});
     label.setFont(font);
     labels.push_back(label);
 }

@@ -54,6 +54,7 @@ private:
     bool hasPicture, toggle, active;
     sf::RectangleShape button;
     sf::Text label;
+    int count;
 };
 
 class Slider : public Widgets{

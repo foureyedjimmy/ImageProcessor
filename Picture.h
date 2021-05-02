@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 
 
+
 struct Pixel{
 
     sf::Uint8 r;
@@ -19,6 +20,7 @@ struct Pixel{
     int getAverage() const;
     sf::Color toColor() const;
 
+
 };
 
 class Picture {
@@ -27,11 +29,13 @@ public:
 
     Picture(std::string& fileName);
 
-    void manip(std::string& manipType);
+    void manip(std::string& manipType, float var1, float var2);
 
     sf::Image createImage();
 
     sf::Image createOrigImage();
+
+    void reset();
 
     void load(std::string& fileName);
 
@@ -39,7 +43,9 @@ public:
 
 private:
 
-    std::vector<std::vector<Pixel>> pixArr, origPixArr;
+    std::vector<std::vector<Pixel>> pixArr, origPixArr, histRBG, hist, red, blue, green;
+
+    std::vector<uint8_t> intensities, rIntense, gIntense, bIntense;
 
     std::vector<std::string> methods, typeArr;
 
@@ -47,7 +53,7 @@ private:
 
     sf::Vector2u size;
 
-    void interpret(int value);
+    void interpret(int value, float var1, int var2);
 
     void createInvert();
 
@@ -57,19 +63,27 @@ private:
 
     static uint8_t getPixAverage(const Pixel& PIXEL);
 
-    void createOutLine();
+    static void getSaturated(Pixel& pixel, float satVal);
+
+    static uint8_t getBiggest(const Pixel& PIX, char& biggest, char& smallest);
+
+    void createOutLine(uint8_t var);
 
     void createRotated();
 
-    void createSaturated();
+    void createSaturated(float val);
 
     void createContrast();
 
     void createRGB();
 
-    void GaussianBlur();
+    void GaussianBlur(float intensity, int kernalSize);
+
+    void getIntensities();
 
     void createSmoothOutline();
+
+    void classify(int& i, int& start, int& high, int& low, int size, int& halfKernal);
 
     void createHistogram();
 

@@ -8,10 +8,10 @@
 Widgets::Widgets(sf::Vector2f size, sf::Vector2f position) {
     this -> size = size;
     this -> position = position;
-    title.setPosition(position);
+    title.setOrigin(size.x/2.1, 0);
+    title.setPosition(position.x + size.x/2, position.y);
     float charSize = size.y/1.5;
     title.setCharacterSize(charSize);
-    title.setOrigin(size.x/2.1, 0);
     title.setFillColor(sf::Color::Black);
 }
 
@@ -58,7 +58,6 @@ Button::Button(sf::Vector2f size, sf::Vector2f position, bool Togglable) : Widge
     button.setFillColor({200,200,200});
     button.setOutlineColor({100,100,100});
     button.setOutlineThickness(3);
-    highlightColor = sf::Color(255,255,255);
 }
 
 void Button::setPicture(sf::Image picture) {
@@ -74,33 +73,38 @@ std::string Button::pressed() {
     if(toggle){
         if(active){
             active = false;
-            button.setFillColor({200,200,200});
         }else{
             active = true;
-            button.setFillColor({255,255,255});
         }
     }else{
-        button.setFillColor({255,255,255});
-        button.setFillColor({200,200,200});
+        active = true;
+        count = 0;
     }
-    std::cout << "pressed button" << std::endl;
     return getAction();
 }
 
 void Button::draw(sf::RenderWindow &window) {
+    if(active){
+        button.setFillColor({200,200,200});
+    }else{
+        button.setFillColor({255,255,255});
+    }
     window.draw(button);
     window.draw(title);
+    if(!toggle && active){
+        count ++;
+        if(count > 5){
+            active = false;
+        }
+    }
 }
-
-
-
 
 Button::Button(sf::Vector2f size, sf::Vector2f position, bool togglable, const std::string &LABEL) : Widgets(size, position) {
     title.setString(sf::String(LABEL));
     title.setFillColor(sf::Color::Black);
-    title.setPosition(position.x + size.x/2, position.y);
     toggle = togglable;
     hasPicture = false;
+    active = false;
     action = LABEL;
     button.setSize(size);
     button.setPosition(position );
@@ -117,7 +121,6 @@ Entry::Entry(sf::Vector2f size, sf::Vector2f position) : Widgets(size, position)
     entryField.setFillColor(sf::Color::White);
     entryField.setOutlineColor(sf::Color::Black);
     entryField.setOutlineThickness(1);
-    title.setPosition(position.x + size.x/2, position.y);
 
 }
 
@@ -127,7 +130,7 @@ void Entry::draw(sf::RenderWindow &window) {
 }
 
 void Entry::select() {
-    entryField.setOutlineThickness(5);
+    entryField.setOutlineThickness(3);
     typedTo = true;
 }
 
@@ -148,7 +151,9 @@ void Entry::clearEntry() {
 
 void Entry::setEntry(char text){
     if(text==8) {
-        entry.pop_back();
+        if(!entry.empty()){
+            entry.pop_back();
+        }
     }else{
         entry += text;
     }
@@ -164,6 +169,9 @@ Label::Label(std::string &text, sf::Vector2f size, sf::Vector2f pos) : Widgets(s
     float charSize = size.y/1.5;
     title.setCharacterSize(charSize);
     title.setString(text);
+    title.setFillColor({255,0,0});
+    title.setString(text);
+    std::cout << title.getPosition().x << std::endl;
 }
 
 void Label::draw(sf::RenderWindow& window){

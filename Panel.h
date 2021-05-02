@@ -14,7 +14,7 @@ class Panel {
 public:
     Panel(sf::Vector2f size, sf::Vector2f location);
 
-    void addButton(std::string& name, sf::Vector2f size, sf::Vector2f pos, bool toggle);
+    void addButton(const std::string& NAME, sf::Vector2f size, sf::Vector2f pos, bool toggle);
 
     void addSlider(sf::Vector2f range, sf::Vector2u size, sf::Vector2u pos);
 
