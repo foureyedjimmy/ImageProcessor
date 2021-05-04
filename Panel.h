@@ -44,7 +44,7 @@ public:
 
     bool isVisible() const;
 
-
+    void setLabelText(int index, std::string text);
 
 private:
     std::vector<Button> buttons;

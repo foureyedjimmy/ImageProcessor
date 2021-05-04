@@ -131,3 +131,7 @@ void Panel::addLabel(std::string name, sf::Vector2f position, sf::Vector2f size)
     label.setFont(font);
     labels.push_back(label);
 }
+
+void Panel::setLabelText(int index, std::string text) {
+    labels[index].setTitle(text);
+}

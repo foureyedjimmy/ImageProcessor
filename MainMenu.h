@@ -35,25 +35,29 @@ public:
 private:
 
     sf::Vector2u windowSize;
-    sf::Keyboard keys;
-    sf::Mouse mouse;
     std::string entryPanel;
     sf::Event event;
     sf::Vector2i pos, mousePos, relPos;
     sf::Font font;
     Picture picture;
     float scaleFactor, variable1, variable2;
-    sf::Texture texture, textureOrig;
-    sf::Sprite mainImage, origImage;
+    sf::Texture texture, textureOrig, RGBhistText, histText;
+    sf::Sprite mainImage, origImage, RGBhist, hist;
     std::vector<Panel> panels;
     std::string data, lastManip, selectedPanel;
-    bool locked;
+    bool locked, histVis, RGBhistVis;
     int req;
 
     void getVariable(std::string& name);
 
-    void check();
+    void startSave();
+    void save();
 
+    void startOpen();
+    void open();
+    void check(sf::RenderWindow& window);
+    void cancelProcess();
+    void updateHists();
     void updatePicture();
     void updateWinSize(sf::RenderWindow &window);
 

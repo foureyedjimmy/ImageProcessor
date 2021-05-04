@@ -169,7 +169,7 @@ Label::Label(std::string &text, sf::Vector2f size, sf::Vector2f pos) : Widgets(s
     float charSize = size.y/1.5;
     title.setCharacterSize(charSize);
     title.setString(text);
-    title.setFillColor({255,0,0});
+    title.setFillColor({0,0,0});
     title.setString(text);
     std::cout << title.getPosition().x << std::endl;
 }

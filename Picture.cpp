@@ -3,16 +3,9 @@
 //
 
 #include "Picture.h"
-#include <cctype>
 #include <cmath>
-
-
-
-
-
-int Pixel::getAverage() const {
-    return (r + g + b) / 3;
-}
+#include <fstream>
+#include <sstream>
 
 
 sf::Color Pixel::toColor() const{
@@ -53,37 +46,26 @@ bool Picture::in(std::string& str){
 }
 
 void Picture::loadPixArr(sf::Image& image){
-    std::vector<uint8_t> temp(255);
-    intensities = temp;
-    rIntense = temp;
-    gIntense = temp;
-    bIntense = temp;
+    pixArr.clear();
+    origPixArr.clear();
     size = image.getSize();
     for(int i = 0; i < size.y; i++){
-        std::vector<Pixel> tempArr(size.x), tempR(size.x), tempG(size.x), tempB(size.y);
+        std::vector<Pixel> tempArr(size.x);
         for(int j = 0; j < size.x; j++){
             sf::Color tempColor(image.getPixel(j, i));
             tempArr[j] = {tempColor.r, tempColor.g, tempColor.b, tempColor.a};
-            tempR[j] = {tempColor.r, 0, 0, tempColor.a};
-            tempG[j] = {0, tempColor.g, 0, tempColor.a};
-            tempB[j] = {0,0, tempColor.b, tempColor.a};
-            intensities[getPixAverage(tempArr[j])] += 1;
-            rIntense[tempColor.r] += 1;
-            gIntense[tempColor.r] += 1;
-            bIntense[tempColor.r] += 1;
         }
-        red.push_back(tempR);
-        green.push_back(tempG);
-        blue.push_back(tempB);
         pixArr.push_back(tempArr);
         origPixArr.push_back(tempArr);
     }
-    createHist();
+    createHistogram();
 }
 
 void Picture::manip(std::string &manipType, float val1, float val2) {
     if(in(manipType)){
-        methods.push_back(manipType);
+        std::stringstream stream;
+        stream << manipType <<  ' '  << val1 << ' '  << val2;
+        methods.push_back(stream.str());
         interpret(indexInType, val1, val2);
     }else{
         std::cerr << "manip type not found, please update type list " << std::endl;
@@ -91,16 +73,8 @@ void Picture::manip(std::string &manipType, float val1, float val2) {
 }
 
 sf::Image Picture::createOrigImage() {
-    sf::Image image;
-    image.create(origPixArr[0].size(), origPixArr.size(), sf::Color(0,0,0, 0));
-    for(unsigned int i = 0; i < origPixArr.size(); i++) {
-        for (unsigned int j = 0; j < origPixArr[0].size(); j++) {
-            image.setPixel(j, i, origPixArr[i][j].toColor());
-        }
-    }
-    return image;
+    return pixArrToImage(origPixArr);
 }
-
 
 void Picture::load(std::string &fileName) {
     sf::Image tempImage;
@@ -108,8 +82,6 @@ void Picture::load(std::string &fileName) {
         std::cerr << "error loading " << fileName << std::endl;
     }
     loadPixArr(tempImage);
-
-
 }
 
 void Picture::interpret(int value, float var1, int var2) {
@@ -132,17 +104,11 @@ void Picture::interpret(int value, float var1, int var2) {
         case 5:
             createRotated();
             break;
-        case 6:
-            createHistogram();
-            break;
-        case 7:
-            createRGBHistogram();
-            break;
         case 8:
             createInvert();
             break;
         case 9:
-            createContrast();
+            createContrast(var1);
             break;
         case 10:
             createSaturated(var1);
@@ -153,6 +119,7 @@ void Picture::interpret(int value, float var1, int var2) {
         default:
             std::cerr << "not viable method" << std::endl;
     }
+    createHistogram();
 }
 
 uint8_t Picture::getPixAverage(const Pixel& PIXEL){
@@ -234,7 +201,7 @@ void Picture::createRotated() {
 
 }
 
-uint8_t Picture::getBiggest(const Pixel& PIX, char& biggest, char& smallest){
+int8_t Picture::getBiggest(const Pixel& PIX, char& biggest, char& smallest){
     if(PIX.r == PIX.g && PIX.r == PIX.b){
         smallest = 'r';
         biggest= 'b';
@@ -309,8 +276,15 @@ void Picture::createSaturated(float satVal) {
 
 }
 
-void Picture::createContrast() {
+void Picture::createContrast(float intensity) {
+    updateIntensities();
+    int average = calcAverage(intensities);
 
+    for(std::vector<Pixel>& tempArr : pixArr){
+        for(Pixel& pix : tempArr){
+            setPixAverage(pix, (int)abs((float)(getPixAverage(pix) - average)*intensity + (float)average));
+        }
+    }
 }
 
 void Picture::classify(int& i, int& start, int& high, int& low, int size, int& halfKernal){
@@ -354,9 +328,8 @@ void Picture::GaussianBlur(float intensity, int kernalSize) {
             int rady = abs(j - matSize);
             kernal[i][j] = 1.0 / (2 * M_PI * intenseSquare) *
                            exp(static_cast<float> (-(radx * radx + rady * rady)) / (2 * intenseSquare));
-            std::cout << kernal[i][j] << ' ';
         }
-        std::cout << std::endl;
+
     }
 
     //creates actual blurred pixel array
@@ -397,28 +370,153 @@ void Picture::GaussianBlur(float intensity, int kernalSize) {
 }
 
 
+void Picture::updateIntensities(){
+    intensities.clear();
+    rIntense.clear();
+    gIntense.clear();
+    bIntense.clear();
+    rIntense.resize(256);
+    gIntense.resize(256);
+    bIntense.resize(256);
+    intensities.resize(256);
+
+    commonIntense = 0;
+    RGBIntense = 0;
+    for(std::vector<Pixel>& tempPix : pixArr){
+        for(Pixel& pix : tempPix){
+            uint8_t average = getPixAverage(pix);
+            intensities[average] ++;
+            rIntense[pix.r] ++;
+            bIntense[pix.b] ++;
+            gIntense[pix.g] ++;
+            if(commonIntense < intensities[average]){
+                commonIntense = intensities[average];
+            }
+            if(RGBIntense < rIntense[pix.r]){
+                RGBIntense = rIntense[pix.r];
+
+            }
+            if(RGBIntense < bIntense[pix.b]){
+                RGBIntense = bIntense[pix.b];
+
+            }
+            if(RGBIntense < gIntense[pix.g]){
+                RGBIntense = gIntense[pix.g];
+
+            }
+
+        }
+    }
+
+}
+
+void Picture::save(std::string& save){
+    sf::Image image = createImage();
+    image.saveToFile(save);
+    while(save[save.size()-1] != '.'){
+        save.pop_back();
+    }
+    save += "txt";
+    std::ofstream out;
+    out.open(save);
+    if(out.is_open()){
+        if(!methods.empty()){
+            for(std::string& item : methods){
+                out << item << std::endl;
+            }
+        }
+        out.close();
+    }
+
+
+}
+
 void Picture::createHistogram() {
+    hist.clear();
+    histRGB.clear();
+    updateIntensities();
 
+    for(int i = 0; i < 255; i++){
+        std::vector<Pixel> tempPix(255);
+        std::vector<Pixel> tempRGB(255);
+        for(int j = 0; j < 255; j++){
+            sf::Uint8 r, g, b;
+            if(intensities[j] * 255.0 / commonIntense >=  255 - i){
+                tempPix[j] = {255,255,255};
+            }else{
+                tempPix[j] = {0,0,0};
+            }
+            if(rIntense[j] * 255.0 / RGBIntense >=  255 - i){
+                r = 255;
+            }else{
+                r = 0;
+            }
+            if(gIntense[j] * 255.0 / RGBIntense >=  255 - i){
+                g = 255;
+            }else{
+                g = 0;
+            }
+            if(bIntense[j] * 255.0 / RGBIntense>=  255 - i){
+                b = 255;
+            }else{
+                b = 0;
+            }
+            tempRGB[j] = {r, g, b};
+        }
+        hist.push_back(tempPix);
+        histRGB.push_back(tempRGB);
+    }
 }
 
-void Picture::createRGBHistogram() {
-
-}
 
 void Picture::createHistogramEqualization() {
+    int average = calcAverage(intensities);
+    int low = findLow(intensities);
+    int high = findHigh(intensities);
 
+    for(std::vector<Pixel>& tempArr : pixArr){
+        for(Pixel& pix : tempArr){
+            int pixAve = getPixAverage(pix);
+            if(pixAve > average){
+                pix = {(sf::Uint8)round(((float)(pix.r - average)/(high - average))*(255 - 127.5) + 127.5), (sf::Uint8)round(((float)(pix.g - average)/(high - average))*(high - 127.5) + 127.5), (sf::Uint8)round(((float)(pix.b - average)/(high - average))*(high - 127.5) + 127.5)};
+            }else if(pixAve < average){
+                pix = {(sf::Uint8)round(((float)(pix.r - low)/(average - low))* 127.5), (sf::Uint8)round(((float)(pix.g - low)/(average - low)) * 127.5), (sf::Uint8)round(((float)(pix.b - low)/(average - low))*127.5)};
+
+            }
+            fixSat(pix);
+        }
+    }
+}
+
+void Picture::fixSat(Pixel& pix){
+    if(pix.r > 255 || pix.g > 255 || pix.b > 255){
+        char biggest, lowest;
+        uint8_t offset = getBiggest(pix, biggest, lowest);
+        pix = {(sf::Uint8)(pix.r + offset), (sf::Uint8)(pix.g + offset), (sf::Uint8) (pix.b + offset)};
+    }
 }
 
 void Picture::createMirror() {
-
+    for(int i = 0; i < pixArr.size(); i ++){
+        std::vector<Pixel> tempMirror(pixArr[0].size());
+        for(int j = 0; j < pixArr[0].size(); j++){
+            tempMirror[pixArr[0].size() - j - 1] = pixArr[i][j];
+        }
+        pixArr[i] = tempMirror;
+    }
 }
 
 sf::Image Picture::createImage(){
+    return pixArrToImage(pixArr);
+}
+
+sf::Image Picture::pixArrToImage(const std::vector<std::vector<Pixel>> &PIX_ARR) {
     sf::Image image;
-    image.create(pixArr[0].size(), pixArr.size(), sf::Color(0,0,0, 0));
-    for(unsigned int i = 0; i < pixArr.size(); i++) {
-        for (unsigned int j = 0; j < pixArr[0].size(); j++) {
-            image.setPixel(j, i, pixArr[i][j].toColor());
+    image.create(PIX_ARR[0].size(), PIX_ARR.size(),
+                 sf::Color(0,0,0, 0));
+    for(unsigned int i = 0; i < PIX_ARR.size(); i++) {
+        for (unsigned int j = 0; j < PIX_ARR[0].size(); j++) {
+            image.setPixel(j, i, PIX_ARR[i][j].toColor());
         }
     }
     return image;
@@ -430,4 +528,67 @@ sf::Vector2u Picture::getSize() {
 
 void Picture::reset(){
     pixArr = origPixArr;
+}
+
+sf::Image Picture::createRGBHist() {
+    return pixArrToImage(histRGB);
+}
+
+sf::Image Picture::createHist() {
+    return pixArrToImage(hist);
+}
+
+
+int Picture::calcAverage(std::vector<int> &vector) {
+    int sum = 0;
+    for(int& item : vector){
+        sum += item;
+    }
+    int secondSum  = 0;
+    sum /= 2;
+    for(int i = 0; i < vector.size();  i++){
+        secondSum += vector[i];
+        if(secondSum >= sum){
+            return i;
+        }
+    }
+    return -1;
+}
+
+int Picture::findLow(std::vector<int> &vector) {
+    if(!vector.empty()) {
+        for (int i = 0; i < vector.size(); i++) {
+            if (vector[i] != 0) {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+int Picture::findHigh(std::vector<int> &vector) {
+    if(!vector.empty()){
+        for(int i = vector.size(); i >=0; i--){
+            if(vector[i] != 0){
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+void Picture::setPixAverage(Pixel &pix, int average) {
+    float scaler = (float)(3 * average)/ (float)(pix.r + pix.g + pix.b);
+    pix = {checkPixBound(pix.r * scaler),
+           checkPixBound(pix.g * scaler),
+           checkPixBound(pix.b * scaler)};
+
+}
+
+sf::Uint8 Picture::checkPixBound(int value) {
+    if(value > 255){
+        return 255;
+    }else{
+        return value;
+    }
 }

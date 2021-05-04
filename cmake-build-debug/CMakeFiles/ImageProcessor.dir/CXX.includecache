@@ -6,12 +6,32 @@
 
 #IncludeRegexTransform: 
 
+C:/Users/jimmy/CLionProjects/ImageProcessor/MainMenu.h
+iostream
+-
+Picture.h
+C:/Users/jimmy/CLionProjects/ImageProcessor/Picture.h
+Panel.h
+C:/Users/jimmy/CLionProjects/ImageProcessor/Panel.h
+SFML/Graphics.hpp
+-
+
+C:/Users/jimmy/CLionProjects/ImageProcessor/Panel.h
+SFML/Graphics.hpp
+-
+iostream
+-
+Widgets.h
+C:/Users/jimmy/CLionProjects/ImageProcessor/Widgets.h
+
 C:/Users/jimmy/CLionProjects/ImageProcessor/Picture.cpp
 Picture.h
 C:/Users/jimmy/CLionProjects/ImageProcessor/Picture.h
-cctype
--
 cmath
+-
+fstream
+-
+sstream
 -
 
 C:/Users/jimmy/CLionProjects/ImageProcessor/Picture.h
@@ -23,6 +43,18 @@ ctime
 -
 SFML/Graphics.hpp
 -
+
+C:/Users/jimmy/CLionProjects/ImageProcessor/Widgets.h
+SFML/Graphics.hpp
+-
+
+C:/Users/jimmy/CLionProjects/ImageProcessor/main.cpp
+SFML/Graphics.hpp
+-
+iostream
+-
+MainMenu.h
+C:/Users/jimmy/CLionProjects/ImageProcessor/MainMenu.h
 
 C:/mingw64/include/SFML/Config.hpp
 TargetConditionals.h

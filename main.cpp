@@ -10,5 +10,6 @@ int main() {
     menu.loadFont(font);
     menu.loadPic("..\\test.png");
     menu.showPic();
+
     menu.loop(window);
 }

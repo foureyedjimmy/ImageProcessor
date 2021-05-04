@@ -17,7 +17,6 @@ struct Pixel{
     sf::Uint8 g;
     sf::Uint8 b;
     sf::Uint8 a=255;
-    int getAverage() const;
     sf::Color toColor() const;
 
 
@@ -35,7 +34,13 @@ public:
 
     sf::Image createOrigImage();
 
+    sf::Image createRGBHist();
+
+    sf::Image createHist();
+
     void reset();
+
+    void save(std::string& path);
 
     void load(std::string& fileName);
 
@@ -43,13 +48,13 @@ public:
 
 private:
 
-    std::vector<std::vector<Pixel>> pixArr, origPixArr, histRBG, hist, red, blue, green;
+    std::vector<std::vector<Pixel>> pixArr, origPixArr, histRGB, hist;
 
-    std::vector<uint8_t> intensities, rIntense, gIntense, bIntense;
+    std::vector<int> intensities, rIntense, gIntense, bIntense;
 
     std::vector<std::string> methods, typeArr;
 
-    int indexInType;
+    int indexInType, RGBIntense, commonIntense;
 
     sf::Vector2u size;
 
@@ -65,7 +70,12 @@ private:
 
     static void getSaturated(Pixel& pixel, float satVal);
 
-    static uint8_t getBiggest(const Pixel& PIX, char& biggest, char& smallest);
+    static int8_t getBiggest(const Pixel& PIX, char& biggest, char& smallest);
+
+
+    static sf::Image pixArrToImage(const std::vector<std::vector<Pixel>>& PIX_ARR);
+
+    void updateIntensities();
 
     void createOutLine(uint8_t var);
 
@@ -73,25 +83,31 @@ private:
 
     void createSaturated(float val);
 
-    void createContrast();
+    void createContrast(float intensity);
 
-    void createRGB();
 
     void GaussianBlur(float intensity, int kernalSize);
 
     void getIntensities();
 
-    void createSmoothOutline();
+    static int calcAverage(std::vector<int>& vector);
 
-    void classify(int& i, int& start, int& high, int& low, int size, int& halfKernal);
+    static int findLow(std::vector<int>& vector);
+
+    static int findHigh(std::vector<int>& vector);
+
+    static void fixSat(Pixel& pix);
+
+    static void classify(int& i, int& start, int& high, int& low, int size, int& halfKernal);
 
     void createHistogram();
-
-    void createRGBHistogram();
 
     void createHistogramEqualization();
 
     void createMirror();
+
+    static void setPixAverage(Pixel& pix, int average);
+    static sf::Uint8 checkPixBound(int value);
 
     void loadPixArr(sf::Image& image);
 
