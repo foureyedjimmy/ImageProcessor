@@ -53,11 +53,11 @@ private:
 
     std::vector<int> intensities, rIntense, gIntense, bIntense;
 
-    std::vector<std::string> methods, typeArr;
+    std::vector<std::string> methods, _typeArr;
 
     int indexInType, RGBIntense, commonIntense;
 
-    sf::Vector2u size;
+    sf::Vector2u _size;
 
     void interpret(int value, float var1, int var2);
 

@@ -8,36 +8,56 @@
 #include <sstream>
 
 
+////////////////////////////////////////////////////
+///To Color:
+///     Turns Pixel to SFML Color
+/// \return sfml Color with same values as pixel
+///////////////////////////////////////////////////
+
 sf::Color Pixel::toColor() const{
     return {r, g, b, a};
 }
 
+//////////////////////////////////////////////////////////
+///Default Constructor:
+///     creates picture object when no params are passed
+/////////////////////////////////////////////////////////
+
+
 Picture::Picture() {
-    typeArr = {"Gaussian Blur", "Equalize", "Grey Scale", "Mirror", "Flip", "Rotate 90 deg",
-               "Histogram", "RGB Hist", "Invert Colors", "Contrast", "Saturate", "Outline"};
+    //very important array
+    _typeArr = {"Gaussian Blur", "Equalize", "Grey Scale", "Mirror", "Flip", "Rotate 90 deg",
+                "Histogram", "RGB Hist", "Invert Colors", "Contrast", "Saturate", "Outline"};
 
 }
 
+////////////////////////////////////////////////////
+///Parameterized Constructor:
+///     Uses file path to create picture object
+/// \param Path to picture
+///////////////////////////////////////////////////
 Picture::Picture(std::string& fileName) {
 
-    //put picture into pixel array
+    //put _picture into pixel array
     sf::Image tempImage;
     tempImage.loadFromFile(fileName);
-    size = tempImage.getSize();
+    _size = tempImage.getSize();
     loadPixArr(tempImage);
 
-    typeArr = {"Gaussian Blur", "Equalize", "Grey Scale", "Mirror", "Flip", "Rotate 90 deg",
-               "Histogram", "RGB Histogram", "Invert Colors", "Contrast", "Saturate", "Outline"};
+    _typeArr = {"Gaussian Blur", "Equalize", "Grey Scale", "Mirror", "Flip", "Rotate 90 deg",
+                "Histogram", "RGB Histogram", "Invert Colors", "Contrast", "Saturate", "Outline"};
 }
 
 
-void Picture::getIntensities() {
-
-}
-
+/////////////////////////////////////////////////////////
+///in:
+///     used to determine if a manip type is in a list
+///     and to tell where it lives in the type array
+/// \param manipulation name
+/// \return whether its in the type array
 bool Picture::in(std::string& str){
-    for(int i = 0; i < typeArr.size(); i++){
-        if(str == typeArr[i]){
+    for(int i = 0; i < _typeArr.size(); i++){
+        if(str == _typeArr[i]){
             indexInType = i;
             return true;
         }
@@ -48,10 +68,10 @@ bool Picture::in(std::string& str){
 void Picture::loadPixArr(sf::Image& image){
     pixArr.clear();
     origPixArr.clear();
-    size = image.getSize();
-    for(int i = 0; i < size.y; i++){
-        std::vector<Pixel> tempArr(size.x);
-        for(int j = 0; j < size.x; j++){
+    _size = image.getSize();
+    for(int i = 0; i < _size.y; i++){
+        std::vector<Pixel> tempArr(_size.x);
+        for(int j = 0; j < _size.x; j++){
             sf::Color tempColor(image.getPixel(j, i));
             tempArr[j] = {tempColor.r, tempColor.g, tempColor.b, tempColor.a};
         }
@@ -288,7 +308,7 @@ void Picture::createContrast(float intensity) {
 }
 
 void Picture::classify(int& i, int& start, int& high, int& low, int size, int& halfKernal){
-    //assigns start, low, and high based on the region and size of kernal surrounding pixel
+    //assigns start, low, and high based on the region and _size of kernal surrounding pixel
     if(i >= halfKernal && i < size - halfKernal){
         start = 0;
         low = i - halfKernal;
@@ -523,7 +543,7 @@ sf::Image Picture::pixArrToImage(const std::vector<std::vector<Pixel>> &PIX_ARR)
 }
 
 sf::Vector2u Picture::getSize() {
-    return size;
+    return _size;
 }
 
 void Picture::reset(){

@@ -34,19 +34,19 @@ public:
 
 private:
 
-    sf::Vector2u windowSize;
-    std::string entryPanel;
-    sf::Event event;
-    sf::Vector2i pos, mousePos, relPos;
-    sf::Font font;
-    Picture picture;
-    float scaleFactor, variable1, variable2;
-    sf::Texture texture, textureOrig, RGBhistText, histText;
-    sf::Sprite mainImage, origImage, RGBhist, hist;
-    std::vector<Panel> panels;
-    std::string data, lastManip, selectedPanel;
-    bool locked, histVis, RGBhistVis;
-    int req;
+    sf::Vector2u _windowSize;
+    std::string _entryPanel;
+    sf::Event _event;
+    sf::Vector2i pos, _mousePos, relPos;
+    sf::Font _font;
+    Picture _picture;
+    float _scaleFactor, _variable1, _variable2;
+    sf::Texture _texture, _textureOrig, _RGBhistText, _histText;
+    sf::Sprite _mainImage, _origImage, _RGBhist, _hist;
+    std::vector<Panel> _panels;
+    std::string _data, _lastManip, _selectedPanel;
+    bool _locked, _histVis, _RGBhistVis;
+    int _req;
 
     void getVariable(std::string& name);
 
