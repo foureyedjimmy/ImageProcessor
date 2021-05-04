@@ -45,6 +45,7 @@ public:
     void load(std::string& fileName);
 
     sf::Vector2u getSize();
+    void createHistogram();
 
 private:
 
@@ -85,7 +86,6 @@ private:
 
     void createContrast(float intensity);
 
-
     void GaussianBlur(float intensity, int kernalSize);
 
     void getIntensities();
@@ -100,13 +100,12 @@ private:
 
     static void classify(int& i, int& start, int& high, int& low, int size, int& halfKernal);
 
-    void createHistogram();
-
     void createHistogramEqualization();
 
     void createMirror();
 
     static void setPixAverage(Pixel& pix, int average);
+
     static sf::Uint8 checkPixBound(int value);
 
     void loadPixArr(sf::Image& image);

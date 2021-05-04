@@ -1,0 +1,13 @@
+Mirror 0 0
+Mirror 0 0
+Grey Scale 0 0
+Grey Scale 0 0
+Grey Scale 0 0
+Mirror 0 0
+Mirror 0 0
+Grey Scale 0 0
+Equalize 0 0
+Contrast 2 8.96831e-044
+Equalize 0 0
+Outline 10 0
+Gaussian Blur 2 3

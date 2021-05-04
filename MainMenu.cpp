@@ -52,7 +52,7 @@ MainMenu::MainMenu(RenderWindow& window) {
    std::string manip_types[SIZE] = {"Gaussian Blur", "Equalize", "Grey Scale", "Mirror", "Flip", "Rotate 90 deg",
                                     "Histogram", "RGB Hist", "Invert Colors", "Contrast", "Saturate", "Outline", "Cancel"};
 
-   bool manip_toggle[SIZE] = {false, false, false, true, true, false, true, true, false, false, false, false, false};
+   bool manip_toggle[SIZE] = {false, false, false, true, true, false, true, true, true, false, false, false, false};
    Panel manip_panel({150, 900}, {0, float(windowSize.y - 900)/2});
    for(int i = 0; i < SIZE; i++) {
        float y = 10 + i * 40;
@@ -211,6 +211,7 @@ void MainMenu::check(sf::RenderWindow& window){
         variable2 = 0;
         panels[5].setVisible(false);
         window.clear(sf::Color::Black);
+        updateHists();
     }
 }
 
@@ -255,6 +256,7 @@ void MainMenu::doAction(std::string& manip) {
             getVariable(manip);
         }else if(manip == "Reset") {
             picture.reset();
+            picture.createHistogram();
         }else if(manip == "Histogram"){
             if(histVis){
                 histVis = false;
@@ -306,12 +308,12 @@ void MainMenu::updateHists() {
     histText.loadFromImage(picture.createHist());
     hist.setTexture(histText);
     hist.setScale(2, 1);
-    hist.setPosition(windowSize.x - 2 * histText.getSize().x, windowSize.y - histText.getSize().y);
+    hist.setPosition(windowSize.x / 1.2 - 2 * histText.getSize().x, windowSize.y - histText.getSize().y);
 
     RGBhistText.loadFromImage(picture.createRGBHist());
     RGBhist.setTexture(RGBhistText);
     RGBhist.setScale(2, 1);
-    RGBhist.setPosition(windowSize.x - 2 * (histText.getSize().x + RGBhistText.getSize().x), windowSize.y - RGBhistText.getSize().y);
+    RGBhist.setPosition(windowSize.x/1.5  - 2 * (histText.getSize().x + RGBhistText.getSize().x), windowSize.y - RGBhistText.getSize().y);
 
 }
 

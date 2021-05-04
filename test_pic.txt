@@ -1,0 +1,17 @@
+Equalize 0 0
+Equalize 0 0
+Grey Scale 0 0
+Mirror 0 0
+Mirror 0 0
+Flip 0 0
+Flip 0 0
+Rotate 90 deg 0 0
+Rotate 90 deg 0 0
+Invert Colors 0 0
+Invert Colors 0 0
+Invert Colors 0 0
+Invert Colors 0 0
+Invert Colors 0 0
+Invert Colors 0 0
+Contrast 5 8.96831e-044
+Gaussian Blur 0 3

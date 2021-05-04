@@ -437,9 +437,9 @@ void Picture::createHistogram() {
     updateIntensities();
 
     for(int i = 0; i < 255; i++){
-        std::vector<Pixel> tempPix(255);
-        std::vector<Pixel> tempRGB(255);
-        for(int j = 0; j < 255; j++){
+        std::vector<Pixel> tempPix(256);
+        std::vector<Pixel> tempRGB(256);
+        for(int j = 0; j < 256; j++){
             sf::Uint8 r, g, b;
             if(intensities[j] * 255.0 / commonIntense >=  255 - i){
                 tempPix[j] = {255,255,255};
