@@ -36,12 +36,10 @@ public:
 protected:
 
     std::string getAction();
-    sf::RectangleShape contents, _border;
-    sf::Color backgroundColor, textColor;
+    sf::RectangleShape _border;
     sf::Text _title;
     sf::Vector2f _size, _position;
     std::string _action;
-    bool hasText;
 };
 
 class Button : public Widgets{
@@ -88,7 +86,6 @@ public:
 private:
 
     sf::RectangleShape _entryField;
-    sf::Text _entryText;
     std::string _entry;
     bool _typedTo;
 };

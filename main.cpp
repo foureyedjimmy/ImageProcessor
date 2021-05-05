@@ -19,9 +19,9 @@ int main() {
                         "Super Epic Image Processor", Style::Close | Style::Titlebar);
     MainMenu menu(window);
     sf::Font font;
-    font.loadFromFile("..\\arial.ttf");
+    font.loadFromFile("arial.ttf");
     menu.loadFont(font);
-    menu.loadPic("..\\test.png");
+    menu.loadPic("test.png");
     menu.showPic();
 
     menu.loop(window);
