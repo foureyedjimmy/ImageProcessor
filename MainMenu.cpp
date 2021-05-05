@@ -2,7 +2,7 @@
  *
  * Authors: James Baldwin and Kaleb Chhabra
  *
- * Description: Sets up image processing UI to interface with picture objects.
+ * Description: Sets up image processing UI to interface with _picture objects.
  */
 
 #include <sstream>
@@ -38,7 +38,7 @@ MainMenu::MainMenu(RenderWindow& window) {
    Panel top_panel({1000, 105}, {float(_windowSize.x) / 2 - 500, 0});
    const int TOP_SIZE = 3;
    std::string top_buttons[TOP_SIZE] = {"Reset", "Open", "Save"};
-   // populates panel with buttons
+   // populates panel with _buttons
    for(int i = 0; i < TOP_SIZE; i++) {
        // places them below eachother
        float y = 10  + i * 30;
@@ -76,7 +76,7 @@ MainMenu::MainMenu(RenderWindow& window) {
    std::string manip_types[SIZE] = {"Gaussian Blur", "Equalize", "Grey Scale", "Mirror", "Flip", "Rotate 90 deg",
                                     "Histogram", "RGB Hist", "Invert Colors", "Contrast", "Saturate", "Outline", "Cancel"};
 
-   // needede to tell which buttons should be togglable
+   // needede to tell which _buttons should be togglable
    bool manip_toggle[SIZE] = {false, false, false, true, true, false, true, true, true, false, false, false, false};
    Panel manip_panel({150, 900}, {0, float(_windowSize.y - 900) / 2});
    for(int i = 0; i < SIZE; i++) {
@@ -148,25 +148,25 @@ void MainMenu::loop(RenderWindow& window) {
             if(_event.type == Event::Closed) {
                 window.close();
 
-            //mouse button click handler
+            //mouse _button click handler
             }else if(_event.type == Event::MouseButtonPressed){
 
-                //checks to make sure button pressed is left
+                //checks to make sure _button pressed is left
                 if(sf::Mouse::isButtonPressed(Mouse::Left)){
 
-                    //gets mouse position
+                    //gets mouse _position
                     _mousePos = sf::Mouse::getPosition();
 
-                    //sets to relative position
+                    //sets to relative _position
                     _mousePos = {_mousePos.x - window.getPosition().x, _mousePos.y - window.getPosition().y - 25};
                     std::string action;
                     for(Panel& panel:_panels){
 
-                        //check all buttons in panel and gets action if one is selected.
+                        //check all _buttons in panel and gets _action if one is selected.
                         action = panel.checkButtons(_mousePos);
 
-                        //if the action is not empty or there is a panel selected,
-                        // do the action, and break loop
+                        //if the _action is not empty or there is a panel selected,
+                        // do the _action, and break loop
                         if(action != "" || panel.checkEntries(_mousePos)) {
                             doAction(action);
                             _selectedPanel = panel.getName();
@@ -180,8 +180,8 @@ void MainMenu::loop(RenderWindow& window) {
                 std::string action;
                 for(Panel& panel:_panels){
 
-                    //checks each entry in each panel, when one returns true
-                    //it will add to entry box
+                    //checks each _entry in each panel, when one returns true
+                    //it will add to _entry box
                    if(panel.getActiveEntry(_event.text.unicode)){
 
                        //if the text is the enter key clear and submit _data
@@ -203,7 +203,7 @@ void MainMenu::loop(RenderWindow& window) {
             }
         }
 
-        // if _locked it will check to see if action has enough _data
+        // if _locked it will check to see if _action has enough _data
         // if so it will start the manip and unlock
         if(_locked){
             check(window);
@@ -236,19 +236,19 @@ void MainMenu::loop(RenderWindow& window) {
 ///get Variable:
 ///     Used to get _data from the variable panels
 ///     Sets the needed panels to proper formate
-///     and locks all other buttons
+///     and locks all other _buttons
 /// \param string of manipulation type
 //////////////////////////////////////////////////
 
 
 void MainMenu::getVariable(std::string &name) {
 
-    // grabs the last manipulation and locks all buttons
+    // grabs the last manipulation and locks all _buttons
     _lastManip = name;
     _locked = true;
 
-    //sets first variable panel to visible
-    // and sets the name for the label of panel
+    //sets first variable panel to _visible
+    // and sets the _name for the label of panel
     _panels[1].setVisible(true);
     _panels[1].setLabelText(0, name);
 
@@ -300,7 +300,7 @@ void MainMenu::check(sf::RenderWindow& window){
         _locked = false;
         _picture.manip(_lastManip, _variable1, _variable2);
 
-        // update picture and set all values back to 0
+        // update _picture and set all values back to 0
         // and set wait screen to invisible
         updatePicture();
         _variable1 = 0;
@@ -339,7 +339,7 @@ void MainMenu::interpretData(){
 ///////////////////////////////////////////////////////////////////
 ///Cancel Process:
 ///     Cancels any process that the gui is in the middle of and
-///     turns back on all buttons
+///     turns back on all _buttons
 //////////////////////////////////////////////////////////////////
 
 void MainMenu::cancelProcess(){
@@ -352,7 +352,7 @@ void MainMenu::cancelProcess(){
 
 ///////////////////////////////////////////////////
 ///do Action:
-///     Main button and entry instruction handler
+///     Main _button and _entry instruction handler
 /// \param manipulation instruction
 ///////////////////////////////////////////////////
 
@@ -361,12 +361,12 @@ void MainMenu::doAction(std::string& manip) {
     // if the instruction is submit
     if (manip == "Submit") {
 
-        // opening new picture
+        // opening new _picture
         if (_selectedPanel == "Open") {
             open();
             showPic();
 
-        // saveing current picture
+        // saveing current _picture
         } else if (_selectedPanel == "Save") {
             save();
 
@@ -388,7 +388,7 @@ void MainMenu::doAction(std::string& manip) {
         // types that require varible input
         if (manip == "Saturate" || manip == "Contrast" || manip == "Gaussian Blur" || manip == "Outline") {
             getVariable(manip);
-        // changes picture to original picture
+        // changes _picture to original _picture
         }else if(manip == "Reset") {
             _picture.reset();
             _picture.createHistogram();
@@ -419,11 +419,11 @@ void MainMenu::doAction(std::string& manip) {
         }else{
             _picture.manip(manip, 0, 0);
         }
-        // updates picture
+        // updates _picture
         updatePicture();
     }
 
-    //if histogram is visible, update histogram
+    //if histogram is _visible, update histogram
     if(_histVis || _RGBhistVis){
         updateHists();
     }
@@ -433,15 +433,15 @@ void MainMenu::doAction(std::string& manip) {
 
 ////////////////////////////////////////////////////////////////////////
 ///Show Picture:
-///     Called when new picture is loaded, creates new manip pic
-///     and new original picture.
+///     Called when new _picture is loaded, creates new manip pic
+///     and new original _picture.
 ///////////////////////////////////////////////////////////////////////
 
 void MainMenu::showPic() {
     //updates manipulatable pictre
     updatePicture();
 
-    //updates constant picture
+    //updates constant _picture
     _textureOrig.loadFromImage(_picture.createOrigImage());
     _origImage.setTexture(_textureOrig, true);
     _origImage.setScale(_scaleFactor, _scaleFactor);
@@ -477,7 +477,7 @@ void MainMenu::updateHists() {
 
 void MainMenu::updatePicture() {
 
-    // loads pixArr as image from picture class
+    // loads _pixArr as image from _picture class
     _texture.loadFromImage(_picture.createImage());
     _mainImage.setTexture(_texture, true);
     _scaleFactor = 810.0 / _picture.getSize().x;
@@ -487,7 +487,7 @@ void MainMenu::updatePicture() {
 
 //////////////////////////////////////////////////////////////////////////
 ///Load Pic:
-///     used to load a new image into picture object
+///     used to load a new image into _picture object
 /////////////////////////////////////////////////////////////////////////
 void MainMenu::loadPic(std::string filename) {
     _picture.load(filename);
@@ -508,7 +508,7 @@ void MainMenu::startSave() {
 
 /////////////////////////////////////////////////
 ///Save:
-///     gets path and saves picture at path
+///     gets path and saves _picture at path
 /////////////////////////////////////////////////
 
 void MainMenu::save() {
@@ -530,7 +530,7 @@ void MainMenu::startOpen() {
 
 //////////////////////////////////////////////////////////////
 ///Open:
-///     loads in picture at path entered into save/load panel
+///     loads in _picture at path entered into save/load panel
 //////////////////////////////////////////////////////////////
 
 void MainMenu::open() {

@@ -1,6 +1,11 @@
-//
-// Created by jimmy on 4/10/2021.
-//
+/*
+ * CSCI 261 Final Project : MainMenu.h
+ *
+ * Authors : James Baldwin and Kaleb Chhabra
+ *
+ * Description: Main Menu for the GUI, contains all the panels, and runs the main loop as well as handles all user
+ *              Input and reacts accordingly
+ */
 
 #ifndef IMAGEPROCESSOR_MAINMENU_H
 #define IMAGEPROCESSOR_MAINMENU_H
@@ -24,11 +29,7 @@ public:
 
     void loadFont(sf::Font& font);
 
-    void createPhoto(std::string);
-
     void doAction(std::string& manip);
-
-    void setFrameRate(int framerate);
 
 
 
@@ -37,7 +38,7 @@ private:
     sf::Vector2u _windowSize;
     std::string _entryPanel;
     sf::Event _event;
-    sf::Vector2i pos, _mousePos, relPos;
+    sf::Vector2i _pos, _mousePos;
     sf::Font _font;
     Picture _picture;
     float _scaleFactor, _variable1, _variable2;
@@ -51,14 +52,21 @@ private:
     void getVariable(std::string& name);
 
     void startSave();
+
     void save();
 
     void startOpen();
+
     void open();
+
     void check(sf::RenderWindow& window);
+
     void cancelProcess();
+
     void updateHists();
+
     void updatePicture();
+
     void updateWinSize(sf::RenderWindow &window);
 
     void interpretData();

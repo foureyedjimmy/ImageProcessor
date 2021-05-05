@@ -1,6 +1,11 @@
-//
-// Created by jimmy on 4/14/2021.
-//
+/*
+ * CSCI 261 Final Project: Panels.h
+ *
+ * Authors: James Baldwin and Kaleb Chhabra
+ *
+ * Description: Panel is an object to put widgets onto in the Main Menu GUI for the user to interface with
+ *              to effect the picture class.
+ */
 
 #ifndef IMAGEPROCESSOR_PANEL_H
 #define IMAGEPROCESSOR_PANEL_H
@@ -15,8 +20,6 @@ public:
     Panel(sf::Vector2f size, sf::Vector2f location);
 
     void addButton(const std::string& NAME, sf::Vector2f size, sf::Vector2f pos, bool toggle);
-
-    void addSlider(sf::Vector2f range, sf::Vector2u size, sf::Vector2u pos);
 
     void addEntry(sf::Vector2f size, sf::Vector2f pos);
 
@@ -47,17 +50,16 @@ public:
     void setLabelText(int index, std::string text);
 
 private:
-    std::vector<Button> buttons;
-    std::vector<Slider> sliders;
-    std::vector<Entry> entries;
-    std::vector<Label> labels;
-    bool visible;
-    sf::Font font;
-    sf::Vector2f pos;
-    sf::RectangleShape outsideBox, insideBox;
-    float boarderWidth;
-    sf::Color backgroundColor, foregroundColor;
-    std::string lastEntry, name;
+    std::vector<Button> _buttons;;
+    std::vector<Entry> _entries;
+    std::vector<Label> _labels;
+    bool _visible;
+    sf::Font _font;
+    sf::Vector2f _pos;
+    sf::RectangleShape _outsideBox;
+    float _boarderWidth;
+    sf::Color _backgroundColor, _foregroundColor;
+    std::string _lastEntry, _name;
 };
 
 

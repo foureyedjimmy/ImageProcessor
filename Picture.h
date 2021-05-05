@@ -1,6 +1,11 @@
-//
-// Created by jimmy on 4/10/2021.
-//
+/*
+ * CSCI 261 Final Project : Picture.h
+ *
+ * Authors : James Baldwin and Kaleb Chhabra
+ *
+ * Description : Picture class to store pixel arrays for histogram and picture as well as
+ *               all the manipulations, save methods and load methods.
+ */
 
 #ifndef IMAGEPROCESSOR_PICTURE_H
 #define IMAGEPROCESSOR_PICTURE_H
@@ -12,14 +17,11 @@
 
 
 struct Pixel{
-
     sf::Uint8 r;
     sf::Uint8 g;
     sf::Uint8 b;
     sf::Uint8 a=255;
     sf::Color toColor() const;
-
-
 };
 
 class Picture {
@@ -49,13 +51,13 @@ public:
 
 private:
 
-    std::vector<std::vector<Pixel>> pixArr, origPixArr, histRGB, hist;
+    std::vector<std::vector<Pixel>> _pixArr, _origPixArr, histRGB, hist;
 
-    std::vector<int> intensities, rIntense, gIntense, bIntense;
+    std::vector<int> _intensities, _rIntense, _gIntense, _bIntense;
 
-    std::vector<std::string> methods, _typeArr;
+    std::vector<std::string> _methods, _typeArr;
 
-    int indexInType, RGBIntense, commonIntense;
+    int _indexInType, _RGBIntense, _commonIntense;
 
     sf::Vector2u _size;
 
@@ -88,7 +90,6 @@ private:
 
     void GaussianBlur(float intensity, int kernalSize);
 
-    void getIntensities();
 
     static int calcAverage(std::vector<int>& vector);
 

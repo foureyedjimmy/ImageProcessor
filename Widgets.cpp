@@ -1,179 +1,360 @@
-//
-// Created by jimmy on 4/14/2021.
-//
+/* CSCI 261 Final Project : Widgets.cpp
+ *
+ * Authors: James Baldwin and Kaleb Chhabra
+ *
+ * Description: definitions for widgets superclass
+ *              and classes which inherit from widgets
+ *
+ */
 
 #include "Widgets.h"
 #include <iostream>
 
+/////////////////////////////////////////////////////////////////
+///Widgits Constructor
+///     used to initialize widgit super class
+/// \param size - size of the widgit
+/// \param position - _position of widgit on the screen
+////////////////////////////////////////////////////
+
 Widgets::Widgets(sf::Vector2f size, sf::Vector2f position) {
-    this -> size = size;
-    this -> position = position;
-    title.setOrigin(size.x/2.1, 0);
-    title.setPosition(position.x + size.x/2, position.y);
+    this -> _size = size;
+    this -> _position = position;
+
+    // set up _title size and location
+    _title.setOrigin(size.x / 2.1, 0);
+    _title.setPosition(position.x + size.x / 2, position.y);
     float charSize = size.y/1.5;
-    title.setCharacterSize(charSize);
-    title.setFillColor(sf::Color::Black);
+    _title.setCharacterSize(charSize);
+    _title.setFillColor(sf::Color::Black);
 }
+
+///////////////////////////////
+///set _font:
+///     sets the widgets _font
+///
+/// \param sfml _font object
+//////////////////////////////
 
 void Widgets::setFont(sf::Font& font) {
-    title.setFont(font);
+    _title.setFont(font);
 }
+
+
+////////////////////////////////////
+///set Text Color:
+///     sets the color of the text
+/// \param sfml color object
+/////////////////////////////////////
 
 void Widgets::setTextColor(sf::Color color) {
-    textColor = color;
-    title.setFillColor(color);
+    _title.setFillColor(color);
 }
+
+////////////////////////////////////////////////
+///Set Color:
+///     sets the background color of the widget
+/// \param color
+///////////////////////////////////////////////
 
 void Widgets::setColor(sf::Color color) {
-    backgroundColor = color;
+    _border.setFillColor(color);
 }
 
+////////////////////////////////////////////////////////
+///In Bounds:
+///     checks to see if a point is in a bounding box
+/// \param point - sfml vector of point
+/// \return boolean of whether its in the widget or not
+///////////////////////////////////////////////////////
+
 bool Widgets::inBounds(sf::Vector2f &point) const {
-    if(point.x > position.x && point.x < position.x + size.x && point.y > position.y && point.y < position.y + size.y){
+    if(point.x > _position.x && point.x < _position.x + _size.x && point.y > _position.y && point.y < _position.y + _size.y){
         return true;
     }else{
         return false;
     }
 }
 
+////////////////////////////////////////////////
+///resize:
+///     used to resize the widgit
+///
+/// \param newSize - sfml vector of new size
+///////////////////////////////////////////////
+
 void Widgets::resize(sf::Vector2f& newSize) {
-    size.x = newSize.x;
-    size.y = newSize.y;
+    _size.x = newSize.x;
+    _size.y = newSize.y;
+    _border.setSize(_size);
 }
+
+////////////////////////////////////////////////////
+///get Action:
+///     gets the action associated with that widget
+/// \return string of action to preform
+////////////////////////////////////////////////////
 
 std::string Widgets::getAction() {
-    return action;
+    return _action;
 }
+
+////////////////////////////////////////////////////
+///set title:
+///     sets the string of the text in the widget
+///
+/// \param NAME - string to set text to
+///////////////////////////////////////////////////
 
 void Widgets::setTitle(const std::string& NAME) {
-    title.setString(NAME);
+    _title.setString(NAME);
 }
 
-Button::Button(sf::Vector2f size, sf::Vector2f position, bool Togglable) : Widgets(size, position){
-    toggle = Togglable;
-    hasPicture = false;
-    title.setString("test");
-    button.setSize(size);
-    button.setPosition(position);
-    button.setFillColor({200,200,200});
-    button.setOutlineColor({100,100,100});
-    button.setOutlineThickness(3);
+/////////////////////////////////////////////////////
+///Button Constructor (basic):
+///     used to create the _button widget (inherits
+///     from widget class)
+///
+/// \param size - size of _button
+/// \param position - position of _button
+/// \param togglable - whether its toggleable or not
+/////////////////////////////////////////////////////
+
+Button::Button(sf::Vector2f size, sf::Vector2f position, bool togglable) : Widgets(size, position){
+    _toggle = togglable;
+    _hasPicture = false;
+    _title.setString("test");
+
+    //set button rects stuff
+    _button.setSize(size);
+    _button.setPosition(position);
+    _button.setFillColor({200, 200, 200});
+    _button.setOutlineColor({100, 100, 100});
+    _button.setOutlineThickness(3);
 }
+
+/////////////////////////////////////////////////////////////////
+///set Picture:
+///     used to set a _picture in a button (not yet implemented)
+/// \param picture - sfml image to put on button
+/////////////////////////////////////////////////////////////////
 
 void Button::setPicture(sf::Image picture) {
-    hasPicture = true;
-    this -> picture = picture;
+    _hasPicture = true;
+    _picture = picture;
 }
 
-void Button::setHighlightColor(sf::Color color) {
-    highlightColor = color;
-}
+
+///////////////////////////////////////////////////
+///Pressed:
+///     handles the pressing of a button
+///
+/// \return the action associated with the button
+//////////////////////////////////////////////////
 
 std::string Button::pressed() {
-    if(toggle){
-        if(active){
-            active = false;
+    if(_toggle){
+        if(_active){
+            _active = false;
         }else{
-            active = true;
+            _active = true;
         }
     }else{
-        active = true;
-        count = 0;
+        _active = true;
+        _count = 0;
     }
-    return getAction();
+    return _action;
 }
 
+///////////////////////////////////////////////////////////
+///Draw:
+///     draws button onto window
+///
+/// \param window - sfml Render Window to draw button on
+///////////////////////////////////////////////////////////
 void Button::draw(sf::RenderWindow &window) {
-    if(active){
-        button.setFillColor({200,200,200});
+    // if _active set fill to dark color
+    if(_active){
+        _button.setFillColor({200, 200, 200});
     }else{
-        button.setFillColor({255,255,255});
+        // else set to normal color (white)
+        _button.setFillColor({255, 255, 255});
     }
-    window.draw(button);
-    window.draw(title);
-    if(!toggle && active){
-        count ++;
-        if(count > 5){
-            active = false;
+
+    //draws button
+    window.draw(_button);
+    window.draw(_title);
+
+    // checks the non-toggleable _buttons
+    if(!_toggle && _active){
+        _count ++;
+        if(_count > 5){
+            _active = false;
         }
     }
 }
+
+/////////////////////////////////////////////////////////////
+///Button Constructor with text:
+///     sets up button object with text given to it
+///
+/// \param size - button size
+/// \param position - position of button
+/// \param togglable - whether its toggleable or not
+/// \param LABEL - text to be written on button (and action)
+///////////////////////////////////////////////////////////////
 
 Button::Button(sf::Vector2f size, sf::Vector2f position, bool togglable, const std::string &LABEL) : Widgets(size, position) {
-    title.setString(sf::String(LABEL));
-    title.setFillColor(sf::Color::Black);
-    toggle = togglable;
-    hasPicture = false;
-    active = false;
-    action = LABEL;
-    button.setSize(size);
-    button.setPosition(position );
-    button.setFillColor({230,230,230});
-    button.setOutlineColor({100,100,100});
-    button.setOutlineThickness(1);
-    highlightColor = sf::Color(255,255,255);
+
+    // sets text
+    _title.setString(sf::String(LABEL));
+    _title.setFillColor(sf::Color::Black);
+
+    // sets other attributes required
+    _toggle = togglable;
+    _hasPicture = false;
+    _active = false;
+    _action = LABEL;
+
+    // sets up button rect
+    _button.setSize(size);
+    _button.setPosition(position );
+    _button.setFillColor({230, 230, 230});
+    _button.setOutlineColor({100, 100, 100});
+    _button.setOutlineThickness(1);
 }
+
+////////////////////////////////////////////////////////
+///Entry Constructor:
+///     constructor for _entry object
+/// \param size - size of _entry
+/// \param position - position of _entry on the screen
+////////////////////////////////////////////////////////
+
 
 Entry::Entry(sf::Vector2f size, sf::Vector2f position) : Widgets(size, position) {
     sf::Vector2f entrySize(size.x - 5, size.y - 5);
-    entryField.setSize(entrySize);
-    entryField.setPosition(position.x + 2.5, position.y + 2.5);
-    entryField.setFillColor(sf::Color::White);
-    entryField.setOutlineColor(sf::Color::Black);
-    entryField.setOutlineThickness(1);
+
+    // initialzes _entry field
+    _entryField.setSize(entrySize);
+    _entryField.setPosition(position.x + 2.5, position.y + 2.5);
+    _entryField.setFillColor(sf::Color::White);
+    _entryField.setOutlineColor(sf::Color::Black);
+    _entryField.setOutlineThickness(1);
 
 }
+
+////////////////////////////////////////////////////
+///Draw:
+///     draws _entry on the screen
+///
+/// \param window - sfml Render Window to draw to
+////////////////////////////////////////////////////
 
 void Entry::draw(sf::RenderWindow &window) {
-    window.draw(entryField);
-    window.draw(title);
+    window.draw(_entryField);
+    window.draw(_title);
 }
+
+/////////////////////////////////////////////////
+///Select:
+///     makes the _entry feild selected on GUI
+////////////////////////////////////////////////
 
 void Entry::select() {
-    entryField.setOutlineThickness(3);
-    typedTo = true;
+
+    //thickens outline
+    _entryField.setOutlineThickness(3);
+
+    // allows text to be typed to it
+    _typedTo = true;
 }
+
+///////////////////////////////////////////////
+///Deselect:
+///     Deselects the _entry field in the GUI
+///////////////////////////////////////////////
 
 void Entry::deselect() {
-    entryField.setOutlineThickness(1);
-    typedTo = false;
+    _entryField.setOutlineThickness(1);
+    _typedTo = false;
 }
+
+////////////////////////////////////////////////
+///Typed Too:
+///     gets whether the Entry is active or not
+///
+/// \return active boolean
+///////////////////////////////////////////////
 
 bool Entry::typedToo() const{
-    return typedTo;
+    return _typedTo;
 }
 
+///////////////////////////////////////////////
+///Clear Entry:
+///     Clears the _entry field
+///////////////////////////////////////////////
 
 void Entry::clearEntry() {
-    entry = "";
-    title.setString(entry);
+    _entry = "";
+    _title.setString(_entry);
 }
+
+/////////////////////////////////////////////
+///Set Entry:
+///     used to update text in entry field
+///
+/// \param text - character to add into entry
+/////////////////////////////////////////////
 
 void Entry::setEntry(char text){
+    // if deleted is typed
     if(text==8) {
-        if(!entry.empty()){
-            entry.pop_back();
+        // if the entry isnt empty
+        if(!_entry.empty()){
+            // delete the last thing in entry
+            _entry.pop_back();
         }
     }else{
-        entry += text;
+        // else add character to entry
+        _entry += text;
     }
-    title.setString(entry);
+    // update the text displayed in box
+    _title.setString(_entry);
 
 }
+
+///////////////////////////////////////////
+///Get Entry:
+///     getter for the entry string
+///
+/// \return entry string
+//////////////////////////////////////////
+
 std::string Entry::getEntry() {
-    return entry;
+    return _entry;
 }
 
+///////////////////////////////////////////////////
+///Label Constructor:
+///     sets basic text label to be drawn on window
+///
+/// \param text - text to be shown
+/// \param size - size of widget
+/// \param pos - position on screen
+/////////////////////////////////////////////////////
 
 Label::Label(std::string &text, sf::Vector2f size, sf::Vector2f pos) : Widgets(size, pos){
-    float charSize = size.y/1.5;
-    title.setCharacterSize(charSize);
-    title.setString(text);
-    title.setFillColor({0,0,0});
-    title.setString(text);
-    std::cout << title.getPosition().x << std::endl;
+    _title.setString(text);
 }
 
+////////////////////////////////////////////////////
+///Draw:
+///     draws label on screen
+/// \param window - sfml window to draw to
+////////////////////////////////////////////////////
+
 void Label::draw(sf::RenderWindow& window){
-    window.draw(title);
+    window.draw(_title);
 }
