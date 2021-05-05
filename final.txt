@@ -1,0 +1,32 @@
+James (Jimmy) Baldwin & Kaleb (Kumar) Chhabra
+Final Project Proposal – CSCI 261 
+Instructor – Easton Bornemeier
+Methods for Image Manipulation
+	We will be creating a program that takes in the raw pixel data from PNGs and performs image processing.
+The goal of this project will be to give the program an image in a PNG format and have the pixel data read into 
+a vector. Once the raw data exists in the vector a class containing a variety of functions will manipulate the 
+8bit values at each pixel in order to create a new vector that will be exported as a new PNG. The class could 
+contain an infinite number of image manipulations, however 5 will be our minimum. Possible image processing functions 
+will be along the lines of: Gaussian blurring, edge softening, edge sharpening, overlaying, and potentially many more. 
+
+Program Documentation:
+	This program is interacted with via a GUI. There is a text box where the user can type the name of the file or 
+image they are trying to interpret or modify. There are a total of 10? buttons the user can select to modify the image 
+they uploaded to the program. Once one (or more) manipulation types are selected, the user can push the modification 
+using the – button. The user can then save the image if they would like, and it will download to the user’s directory. 
+There is also a button the user can select to clear the current image that is loaded and bring in a new image. 
+
+Test:
+	Test 1: png image of a screen shot of the Minecraft website. All manips work as intended.
+	Test 2: file not found. outputs file not found to the console.
+	Test 3: Save button works as intended and saves files in the correct filepath.
+	Test 4:	Reset button clears the file slate as intended.
+	Test 5:	File I/O and txt files generate as expected.
+Reflections: 
+	We learned a lot about the SFML Library. Building the classes for the buttons and the file input text box was 
+a bit o a challenge, but the biggest takeaway for me was learning to read and interpret the documentation available. 
+SFML is a vast library with a lot of potential, and in the future, we may need to learn how to use even more complex 
+libraries. Knowing how to navigate and problem solve issues that aren’t quick google searches is a valuable skill we 
+learned from this project. I think we did a good job of laying out what was needed logistically from the get go, but 
+we hope that the knowledge we gained from this admittedly daunting project, will translate to good project building 
+skills in the future.
